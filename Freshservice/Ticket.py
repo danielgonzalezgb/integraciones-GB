@@ -25,6 +25,8 @@ class Ticket:
         else:
             tickets = json.loads(respuesta.text)
             return tickets
+
+
     #Metodo para crear un ticket en freshdesk
 
     def CreateTicket(self, description, subject, email, priority, status, source, ticket_type, cc_email):
@@ -46,8 +48,15 @@ class Ticket:
         else:
             return False
 
+    def DeleteTicket(self, id_ticket):
+        respuesta = requests.delete(str(self.connection.url) + '/helpdesk/tickets/'+str(id_ticket)+'.json',
+                                 auth=(self.connection.user, self.connection.password))
 
-m = Connection('https://gbdemo.freshdesk.com', 'daniel.gonzalez@gb-advisors.com', '','eduardo,.4052')
-fresh = Ticket(m)
+        if respuesta.status_code != 200:
+            return 'Error response code: ' + str(respuesta.status_code)
+        else:
+            return True
 
-fresh.GetTickets()
+    def UpdateTicket(self):
+        return True
+
